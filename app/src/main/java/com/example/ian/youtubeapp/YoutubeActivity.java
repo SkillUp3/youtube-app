@@ -18,8 +18,8 @@ import static com.google.android.gms.internal.zzt.TAG;
 
 public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
-    static final String GOOGLE_API_KEY = "AIzaSyAPGkA-th2DmTK1nGxz8lpkPUPT7L0vHgA";
-    static final String YOUTUBE_VIDEO_ID = "V1pI0CljwKw";
+    static final String GOOGLE_API_KEY = "AIzaSyADaTfDjea6S5Rb72vaU7RX9719SxR8XYs";
+    static final String YOUTUBE_VIDEO_ID = "mbs2ak1BXAY";
     static final String YOUTUBE_PLAYLIST = "PL3xl1Whm1aOFufXNfAL603llu75BTu3m6";
 
 
@@ -48,9 +48,11 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         Log.d(TAG, "onInitializationSuccess: provider" + provider.getClass().toString());
         Toast.makeText(this, "Initialized Youtube Player successfully", Toast.LENGTH_SHORT).show();
+        youTubePlayer.setPlaybackEventListener(mPlaybackEventListener);
+        youTubePlayer.setPlayerStateChangeListener(mPlayerStateChangeListener);
 
 //            if(!wasRestored){
-                youTubePlayer.cueVideo(YOUTUBE_VIDEO_ID);
+        youTubePlayer.cueVideo(YOUTUBE_VIDEO_ID);
 //            }
     }
 
@@ -58,13 +60,77 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
         final int REQUEST_CODE = 1;
 
-        if(youTubeInitializationResult.isUserRecoverableError()){
+        if (youTubeInitializationResult.isUserRecoverableError()) {
             youTubeInitializationResult.getErrorDialog(this, REQUEST_CODE).show();
-        }else{
+        } else {
             String errorMessage = String.format("There was an error initializing the Youtube " +
                     "Player(%1$s)", youTubeInitializationResult.toString());
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
         }
 
     }
+    private YouTubePlayer.PlaybackEventListener mPlaybackEventListener = new YouTubePlayer.PlaybackEventListener() {
+        @Override
+        public void onPlaying() {
+            Toast.makeText(YoutubeActivity.this, "Good, video is playing okay", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onPaused() {
+            Toast.makeText(YoutubeActivity.this, "Video has paused", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onStopped() {
+
+        }
+
+        @Override
+        public void onBuffering(boolean b) {
+
+        }
+
+        @Override
+        public void onSeekTo(int i) {
+
+        }
+    };
+
+    private YouTubePlayer.PlayerStateChangeListener mPlayerStateChangeListener = new YouTubePlayer.PlayerStateChangeListener()
+
+    {
+
+        @Override
+        public void onLoading() {
+
+        }
+
+        @Override
+        public void onLoaded(String s) {
+
+        }
+
+        @Override
+        public void onAdStarted() {
+            Toast.makeText(YoutubeActivity.this, "Click Ad now.", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onVideoStarted() {
+            Toast.makeText(YoutubeActivity.this, "Video has started", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onVideoEnded() {
+            Toast.makeText(YoutubeActivity.this, "Video has ended", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(YouTubePlayer.ErrorReason errorReason) {
+
+        }
+    };
 }
